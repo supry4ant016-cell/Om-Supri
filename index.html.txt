@@ -1,0 +1,940 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CreatorStore — Produk Digital & Aset Kreatif Instan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Midtrans Snap JS (Ganti sandbox dengan app.midtrans.com saat Live) -->
+  <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="SB-Mid-client-GANTI_DENGAN_CLIENT_KEY_ANDA"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .glass-card { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); }
+    @keyframes popIn {
+      0% { opacity: 0; transform: scale(0.96) translateY(10px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-pop { animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+  </style>
+</head>
+<body class="bg-[#F8FAFC] text-slate-900 antialiased selection:bg-violet-600 selection:text-white min-h-screen pb-28">
+
+  <!-- Top Navbar Responsif (HP & Laptop) -->
+  <nav class="sticky top-0 z-30 glass-card border-b border-slate-200/70">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between gap-3">
+      <!-- Brand -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600 via-indigo-600 to-fuchsia-500 text-white flex items-center justify-center font-extrabold text-sm shadow-md shadow-indigo-500/20">
+          ⚡
+      <!-- Aksi Kanan: Tombol Admin (Hanya muncul di Mode Seller) & Keranjang -->
+      <div class="flex items-center gap-2">
+        <button id="btn-admin-nav" onclick="bukaLoginAdmin()" title="Kelola Produk (Mode Penjual)" 
+          class="hidden px-3 py-2 rounded-full bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 text-xs font-extrabold items-center gap-1.5 transition shadow-xs">
+          <span>👑</span>
+          <span>Mode Owner</span>
+        </button>
+
+        <button onclick="bukaCheckout()" class="relative bg-slate-900 hover:bg-violet-600 text-white px-4 py-2 rounded-full text-xs font-bold flex items-center gap-2 transition shadow-sm">
+          <span>🛒</span>
+          <span class="hidden sm:inline">Keranjang</span>
+          <span id="nav-cart-badge" class="bg-violet-500 text-white text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">0</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner Khusus Pemilik Toko (Hanya tampil jika membuka URL ?seller=1) -->
+  <div id="seller-top-banner" class="hidden bg-slate-900 text-white border-b border-slate-800">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-2.5 flex flex-wrap items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="bg-amber-400 text-slate-950 font-extrabold px-2 py-0.5 rounded-md text-[10px]">OWNER VIEW</span>
+        <span class="text-slate-300">Anda sedang membuka tampilan khusus pemilik toko. Pembeli biasa tidak melihat bar ini.</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="bukaLoginAdmin()" class="bg-violet-600 hover:bg-violet-500 text-white px-3 py-1 rounded-lg font-bold transition">
+          + Kelola Produk & Omzet
+        </button>
+        <button onclick="keluarModeSeller()" class="text-slate-400 hover:text-white underline text-[11px]">
+          Lihat sebagai Pembeli
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hero Section Bento Style (Kekinian & Responsif) -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-6 pb-2">
+    <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-violet-950 rounded-3xl p-6 sm:p-8 text-white relative overflow-hidden shadow-xl">
+      <!-- Dekorasi Glow -->
+      <div class="absolute -top-24 -right-24 w-64 h-64 bg-fuchsia-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-xl">
+          <div class="inline-flex items-center gap-2 bg-white/10 border border-white/15 backdrop-blur-md px-3 py-1 rounded-full text-[11px] font-semibold text-indigo-200 mb-3">
+            <span>✨ Official Digital Store</span>
+            <span>•</span>
+            <span>QRIS & e-Wallet Instant</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+            Upgrade Produktivitas & Konten Kamu dalam Sekali Klik.
+          </h1>
+          <p class="text-xs sm:text-sm text-slate-300 mt-2.5 leading-relaxed">
+            Lihat pratinjau isi produk sebelum membeli. Setelah pembayaran QRIS terkonfirmasi, tautan akses otomatis dikirim langsung ke email kamu.
+          </p>
+        </div>
+
+        <!-- Highlight Trust Badges -->
+        <div class="grid grid-cols-2 sm:grid-cols-2 gap-2.5 shrink-0">
+          <div class="bg-white/10 backdrop-blur-md border border-white/10 p-3.5 rounded-2xl">
+            <p class="text-lg font-extrabold text-amber-300">⚡ 5 Detik</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">Kirim Otomatis ke Email</p>
+          </div>
+          <div class="bg-white/10 backdrop-blur-md border border-white/10 p-3.5 rounded-2xl">
+            <p class="text-lg font-extrabold text-emerald-300">👀 Preview</p>
+            <p class="text-[11px] text-slate-300 mt-0.5">Cek Sampel Isi Produk</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Search Bar Khusus Mobile -->
+      <div class="mt-5 md:hidden relative z-10">
+        <input type="text" id="search-mobile" oninput="sinkronPencarian(this.value)" placeholder="Cari template, e-book, preset..." 
+          class="w-full bg-white/15 border border-white/20 text-white placeholder-slate-300 text-xs rounded-2xl py-3 pl-10 pr-4 focus:outline-none focus:bg-white focus:text-slate-900 focus:placeholder-slate-400 transition">
+        <svg class="w-4 h-4 text-slate-300 absolute left-3.5 top-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Filter Kategori -->
+  <section class="max-w-6xl mx-auto px-4 sm:px-6 mt-5">
+    <div id="kategori-bar" class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-2">
+      <button onclick="setKategori('ALL')" data-kat="ALL" class="kat-btn bg-slate-900 text-white px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap shadow-xs transition">
+        🔥 Semua Produk
+      </button>
+    </div>
+  </section>
+
+  <!-- Grid Katalog Responsif (2 Kolom di HP, 3 di Tablet, 4 di Laptop) -->
+  <main id="katalog-grid" class="max-w-6xl mx-auto px-4 sm:px-6 mt-3 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5">
+    <!-- Diisi oleh JS -->
+  </main>
+
+  <!-- Floating Cart Bar (Khusus Mobile saat ada item) -->
+  <div id="floating-cart" class="hidden md:hidden fixed bottom-4 left-4 right-4 z-30">
+    <button onclick="bukaCheckout()" class="w-full bg-slate-900 text-white p-3.5 rounded-2xl shadow-2xl border border-slate-700/50 flex items-center justify-between active:scale-[0.98] transition">
+      <div class="flex items-center gap-3">
+        <span id="cart-badge" class="bg-violet-600 text-white text-xs font-extrabold w-8 h-8 rounded-xl flex items-center justify-center">0</span>
+        <div class="text-left">
+          <p class="text-[10px] text-slate-400 font-medium">Total Belanja</p>
+          <p id="cart-total-text" class="text-sm font-extrabold">Rp 0</p>
+        </div>
+      </div>
+      <span class="bg-gradient-to-r from-violet-600 to-indigo-600 text-white px-4 py-2 rounded-xl text-xs font-bold">
+        Checkout &rarr;
+      </span>
+    </button>
+  </div>
+
+  <!-- MODAL 1: DETAIL & PREVIEW ISI PRODUK (Untuk Pembeli) -->
+  <div id="modal-detail" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-40 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-2xl rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col animate-pop shadow-2xl">
+      <!-- Header Modal -->
+      <div class="px-5 py-4 border-b border-slate-100 flex justify-between items-center bg-white sticky top-0 z-10">
+        <div class="flex items-center gap-2">
+          <span id="detail-kategori" class="text-[10px] font-extrabold uppercase tracking-wider bg-violet-100 text-violet-700 px-2.5 py-1 rounded-full">Kategori</span>
+          <span class="text-[11px] text-emerald-600 font-semibold">✓ Akses Instan</span>
+        </div>
+        <button onclick="tutupModal('modal-detail')" class="bg-slate-100 hover:bg-slate-200 text-slate-600 w-8 h-8 rounded-full flex items-center justify-center font-bold transition">&times;</button>
+      </div>
+
+      <!-- Konten Scrollable -->
+      <div class="p-5 overflow-y-auto space-y-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 items-start">
+          <div>
+            <img id="detail-img" src="" alt="Cover Produk" class="w-full h-52 sm:h-56 object-cover rounded-2xl bg-slate-100 border border-slate-100">
+            
+            <!-- Tombol Lihat Live Preview / Sampel -->
+            <a id="detail-preview-link" href="#" target="_blank" rel="noopener noreferrer" 
+              class="mt-3 w-full bg-amber-50 hover:bg-amber-100 border border-amber-200 text-amber-900 py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 transition">
+              <span>👀 Lihat Sampel / Live Preview Isi</span>
+              <span>↗</span>
+            </a>
+          </div>
+
+          <div>
+            <h2 id="detail-nama" class="text-lg sm:text-xl font-extrabold text-slate-900 leading-snug"></h2>
+            <p id="detail-harga" class="text-violet-600 font-extrabold text-xl mt-1.5"></p>
+            
+            <div class="mt-4">
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-slate-400 mb-1.5">Deskripsi Produk</h4>
+              <p id="detail-deskripsi" class="text-xs text-slate-600 leading-relaxed whitespace-pre-line"></p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Blok Review / Bocoran Daftar Isi Produk -->
+        <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4">
+          <div class="flex items-center gap-2 mb-2.5">
+            <span class="text-base">📦</span>
+            <h4 class="text-xs font-extrabold text-slate-800 uppercase tracking-wide">Apa Saja yang Kamu Dapatkan (Preview Isi):</h4>
+          </div>
+          <ul id="detail-isi-list" class="space-y-2 text-xs text-slate-700"></ul>
+        </div>
+      </div>
+
+      <!-- Footer Tombol Beli -->
+      <div class="p-4 border-t border-slate-100 bg-white flex gap-3">
+        <button id="detail-btn-beli" class="flex-1 bg-slate-900 hover:bg-violet-600 text-white py-3.5 rounded-2xl font-bold text-xs sm:text-sm shadow-lg transition">
+          + Tambah ke Keranjang
+        </button>
+        <button id="detail-btn-langsung" class="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-95 text-white py-3.5 rounded-2xl font-bold text-xs sm:text-sm shadow-lg transition">
+          Beli Sekarang &rarr;
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CHECKOUT -->
+  <div id="modal-checkout" class="hidden fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-md rounded-t-3xl sm:rounded-3xl p-5 max-h-[92vh] overflow-y-auto animate-pop shadow-2xl">
+      <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-4">
+        <div>
+          <h2 class="text-base font-extrabold">Checkout Instan</h2>
+          <p class="text-[11px] text-slate-400">File otomatis terkirim setelah pembayaran</p>
+        </div>
+        <button onclick="tutupModal('modal-checkout')" class="bg-slate-100 text-slate-500 w-8 h-8 rounded-full flex items-center justify-center font-bold">&times;</button>
+      </div>
+
+      <div id="checkout-list" class="space-y-2.5 mb-4 max-h-44 overflow-y-auto pr-1"></div>
+
+      <form id="checkout-form" onsubmit="prosesCheckout(event)" class="space-y-3 border-t border-slate-100 pt-4">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Nama Lengkap</label>
+          <input type="text" id="input-nama" required placeholder="Nama kamu" 
+            class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-violet-600">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Email Aktif (Tujuan Pengiriman Link File)</label>
+          <input type="email" id="input-email" required placeholder="kamu@gmail.com" 
+            class="w-full border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm focus:outline-none focus:border-violet-600">
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Nomor WhatsApp</label>
+  <!-- MODAL 3: PANEL ADMIN PENJUAL (Tambah, Edit, Hapus Produk & Laporan Omzet) -->
+  <div id="modal-admin" class="hidden fixed inset-0 bg-slate-950/75 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center p-0 sm:p-4">
+    <div class="bg-white w-full max-w-4xl rounded-t-3xl sm:rounded-3xl overflow-hidden max-h-[92vh] flex flex-col animate-pop shadow-2xl">
+      <!-- Header Admin -->
+      <div class="px-5 py-4 bg-slate-900 text-white flex justify-between items-center">
+        <div>
+          <h2 class="text-base font-extrabold flex items-center gap-2">👑 Dashboard Pemilik Toko</h2>
+          <p class="text-[11px] text-slate-400">Kelola katalog produk digital & pantau transaksi masuk</p>
+        </div>
+        <button onclick="tutupModal('modal-admin')" class="bg-white/10 hover:bg-white/20 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">&times;</button>
+      </div>
+
+      <!-- Ringkasan Statistik Penjualan -->
+      <div class="px-5 pt-4 bg-slate-50 border-b border-slate-200/70 pb-4 grid grid-cols-3 gap-3">
+        <div class="bg-white p-3 rounded-2xl border border-slate-200/70">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Total Omzet Lunas</p>
+          <p id="stat-omzet" class="text-sm sm:text-lg font-extrabold text-emerald-600 mt-0.5">Rp 0</p>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200/70">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Transaksi Lunas</p>
+          <p id="stat-sukses" class="text-sm sm:text-lg font-extrabold text-slate-900 mt-0.5">0 Order</p>
+        </div>
+        <div class="bg-white p-3 rounded-2xl border border-slate-200/70">
+          <p class="text-[10px] font-bold text-slate-400 uppercase">Produk Aktif</p>
+          <p id="stat-produk" class="text-sm sm:text-lg font-extrabold text-violet-600 mt-0.5">0 Item</p>
+        </div>
+      </div>
+
+      <!-- Body Admin: Grid Form & Daftar Produk -->
+      <div class="p-5 overflow-y-auto grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <!-- Form Tambah / Edit (5 Kolom di Laptop) -->
+        <div class="lg:col-span-5 bg-slate-50 p-4 rounded-2xl border border-slate-200/80 h-fit">
+          <div class="flex justify-between items-center mb-3">
+            <h3 id="admin-form-title" class="text-xs font-extrabold uppercase tracking-wider text-violet-700">+ Tambah Produk Baru</h3>
+            <button type="button" id="btn-reset-form" onclick="resetFormAdmin()" class="hidden text-[11px] text-slate-500 underline">Batal Edit</button>
+          </div>
+
+          <form id="admin-product-form" onsubmit="simpanProdukAdmin(event)" class="space-y-2.5 text-xs">
+            <input type="hidden" id="adm-id">
+            <div>
+              <label class="font-bold text-slate-600 block mb-1">Nama Produk *</label>
+              <input type="text" id="adm-nama" required placeholder="Contoh: Notion Finance Tracker" class="w-full border rounded-xl p-2.5 bg-white">
+            </div>
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="font-bold text-slate-600 block mb-1">Kategori *</label>
+                <input type="text" id="adm-kategori" required placeholder="Notion / E-Book" class="w-full border rounded-xl p-2.5 bg-white">
+              </div>
+              <div>
+                <label class="font-bold text-slate-600 block mb-1">Harga (Rp) *</label>
+                <input type="number" id="adm-harga" required placeholder="49000" class="w-full border rounded-xl p-2.5 bg-white">
+              </div>
+            </div>
+            <div>
+              <label class="font-bold text-slate-600 block mb-1">URL Gambar Cover</label>
+              <input type="url" id="adm-gambar" placeholder="https://..." class="w-full border rounded-xl p-2.5 bg-white">
+            </div>
+            <div>
+              <label class="font-bold text-slate-600 block mb-1">Link Sampel / Preview (Opsional)</label>
+              <input type="url" id="adm-preview" placeholder="https://drive.google.com/... (untuk dilihat pembeli)" class="w-full border rounded-xl p-2.5 bg-white">
+            </div>
+            <div>
+              <label class="font-bold text-slate-600 block mb-1">Bocoran Isi Produk (Pisahkan tiap poin dengan baris baru)</label>
+              <textarea id="adm-isi" rows="3" placeholder="12 Halaman PDF Full Color&#10;Template Excel Otomatis&#10;Video Panduan 15 Menit" class="w-full border rounded-xl p-2.5 bg-white"></textarea>
+            </div>
+            <div>
+              <label class="font-bold text-slate-600 block mb-1">Deskripsi Lengkap</label>
+              <textarea id="adm-deskripsi" rows="2" placeholder="Jelaskan manfaat produk..." class="w-full border rounded-xl p-2.5 bg-white"></textarea>
+            </div>
+            <div class="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">
+              <label class="font-bold text-emerald-800 block mb-1">🔒 Link File Utama (Rahasia - Dikirim setelah lunas) *</label>
+              <input type="url" id="adm-file" required placeholder="https://drive.google.com/file/..." class="w-full border border-emerald-200 rounded-lg p-2 bg-white">
+            </div>
+
+            <button type="submit" id="btn-simpan-produk" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-3 rounded-xl font-bold text-xs shadow-md transition">
+              Simpan Produk ke Katalog
+            </button>
+          </form>
+        </div>
+
+        <!-- Daftar Produk Aktif untuk Diedit/Dihapus (7 Kolom di Laptop) -->
+        <div class="lg:col-span-7">
+          <div class="flex justify-between items-center mb-3">
+            <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-500">Daftar Produk di Toko (<span id="adm-count">0</span>)</h3>
+          </div>
+          <div id="admin-product-list" class="space-y-2.5 max-h-[62vh] overflow-y-auto pr-1"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: PIN LOGIN ADMIN -->
+  <div id="modal-pin" class="hidden fixed inset-0 bg-slate-950/75 z-50 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-xs rounded-3xl p-6 text-center animate-pop shadow-2xl">
+      <div class="w-12 h-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center text-xl mx-auto mb-3">🔐</div>
+      <h3 class="text-base font-extrabold">Akses Penjual</h3>
+      <p class="text-xs text-slate-500 mt-1">Masukkan PIN Admin untuk mengelola katalog produk (Default: 123456)</p>
+      <input type="password" id="input-pin" placeholder="••••••" class="w-full text-center tracking-widest font-bold text-lg border border-slate-200 rounded-xl py-2.5 mt-4 focus:outline-none focus:border-violet-600">
+      <div class="flex gap-2 mt-4">
+        <button onclick="tutupModal('modal-pin')" class="flex-1 bg-slate-100 text-slate-700 py-2.5 rounded-xl text-xs font-bold">Batal</button>
+        <button onclick="verifikasiPin()" class="flex-1 bg-slate-900 text-white py-2.5 rounded-xl text-xs font-bold">Masuk</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: NOTIFIKASI STATUS -->
+  <div id="modal-status" class="hidden fixed inset-0 bg-slate-950/75 z-50 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-6 text-center animate-pop shadow-2xl">
+      <div id="status-icon" class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4"></div>
+      <h3 id="status-title" class="text-lg font-extrabold text-slate-900"></h3>
+      <p id="status-desc" class="text-xs text-slate-500 mt-2 leading-relaxed"></p>
+      <button onclick="tutupModal('modal-status')" class="w-full mt-5 bg-slate-900 text-white py-3 rounded-xl text-xs font-bold">
+        Mengerti
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // GANTI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/GANTI_DENGAN_ID_DEPLOYMENT_ANDA/exec';
+
+    let katalogProduk = [];
+    let keranjang = [];
+    let kategoriAktif = 'ALL';
+    let adminPinTersimpan = '';
+    let isSellerMode = false;
+
+    // Deteksi apakah dibuka sebagai Pemilik Toko (?seller=1 atau ?admin=true)
+    function cekModeTampilan() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('seller') === '1' || params.get('admin') === 'true') {
+        aktifkanModeSeller();
+      }
+    }
+
+    function aktifkanModeSeller() {
+      isSellerMode = true;
+      const btnNav = document.getElementById('btn-admin-nav');
+      const banner = document.getElementById('seller-top-banner');
+      if (btnNav) {
+        btnNav.classList.remove('hidden');
+        btnNav.classList.add('flex');
+      }
+      if (banner) banner.classList.remove('hidden');
+    }
+
+    function keluarModeSeller() {
+      isSellerMode = false;
+      adminPinTersimpan = '';
+      const btnNav = document.getElementById('btn-admin-nav');
+      const banner = document.getElementById('seller-top-banner');
+      if (btnNav) {
+        btnNav.classList.add('hidden');
+        btnNav.classList.remove('flex');
+      }
+      if (banner) banner.classList.add('hidden');
+      // Bersihkan parameter URL tanpa reload halaman
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+
+    // Pintasan keyboard rahasia di Laptop (Ctrl + Shift + L) untuk memunculkan mode pemilik toko
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'l') {
+        aktifkanModeSeller();
+        bukaLoginAdmin();
+      }
+    });
+
+    // Data Contoh Lengkap dengan Preview Isi & Sampel
+    const DEMO_PRODUK = [
+      {
+        id_produk: 'DIG-01',
+        nama_produk: 'All-in-One Notion Life & Finance OS 2026',
+        kategori: 'Notion',
+        harga: 49000,
+        gambar_url: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?auto=format&fit=crop&w=600&q=80',
+        preview_url: 'https://www.notion.so',
+        isi_produk: 'Dashboard Keuangan Bulanan & Cashflow Otomatis\nHabit Tracker & Daily Planner Aesthetic\nDatabase Manajemen Proyek & Tugas Kuliah/Kerja\nVideo Tutorial Duplikasi ke Akun Notion Gratis',
+        deskripsi: 'Atur seluruh jadwal, target tabungan, dan proyek harian kamu dalam satu ruang kerja Notion yang rapi dan estetik.',
+        file_akses: 'https://drive.google.com/contoh-link-notion'
+      },
+      {
+        id_produk: 'DIG-02',
+        nama_produk: '150+ Viral Hooks & Prompt AI Konten Kreator',
+        kategori: 'E-Book',
+        harga: 35000,
+        gambar_url: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&w=600&q=80',
+        preview_url: 'https://drive.google.com',
+        isi_produk: 'E-Book PDF 45 Halaman (Akses Mobile & Desktop)\n150+ Template Hook 3 Detik Pertama TikTok & Reels\n50 Prompt Riset Ide Konten & Script Storytelling\nBonus Kalender Konten 30 Hari',
+        deskripsi: 'Buntu ide bikin konten? Gunakan bank hook dan prompt AI yang sudah teruji menaikkan retensi penonton.',
+        file_akses: 'https://drive.google.com/contoh-link-ebook'
+      },
+      {
+        id_produk: 'DIG-03',
+        nama_produk: 'Lightroom Mobile Preset — Cinematic Film',
+        kategori: 'Preset',
+        harga: 29000,
+        gambar_url: 'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=600&q=80',
+        preview_url: 'https://unsplash.com',
+        isi_produk: '15 File Preset Format DNG (Lightroom Mobile Gratis)\n15 File Preset XMP (Lightroom Desktop)\nPanduan PDF Cara Import & Atur Pencahayaan',
+        deskripsi: 'Ubah foto HP biasa menjadi tone warna ala kamera analog film Jepang hanya dalam satu kali klik.',
+        file_akses: 'https://drive.google.com/contoh-link-preset'
+      },
+      {
+        id_produk: 'DIG-04',
+        nama_produk: 'Kalkulator HPP, Profit & Stok Bisnis UMKM',
+        kategori: 'Template',
+        harga: 59000,
+        gambar_url: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=600&q=80',
+        preview_url: 'https://docs.google.com/spreadsheets',
+        isi_produk: 'File Master Google Sheets & Microsoft Excel (.xlsx)\nSimulasi Biaya Admin Marketplace & Diskon Promo\nGrafik Laporan Laba Rugi Otomatis',
+        deskripsi: 'Pastikan bisnis kamu tidak boncos karena salah hitung margin. Tinggal masukkan modal bahan, harga jual ideal langsung keluar.',
+        file_akses: 'https://drive.google.com/contoh-link-sheets'
+      }
+    ];
+
+    async function initToko() {
+      try {
+        if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
+          katalogProduk = [...DEMO_PRODUK];
+          renderSemuaUI();
+          return;
+        }
+        const res = await fetch(`${APPS_SCRIPT_URL}?action=getProducts`);
+        const json = await res.json();
+        katalogProduk = json.data || [];
+        renderSemuaUI();
+      } catch (err) {
+        katalogProduk = [...DEMO_PRODUK];
+        renderSemuaUI();
+      }
+    }
+
+    function renderSemuaUI() {
+      buatTabKategori(katalogProduk);
+      filterKatalog();
+      renderDaftarAdmin();
+    }
+
+    function buatTabKategori(produk) {
+      const bar = document.getElementById('kategori-bar');
+      bar.innerHTML = `
+        <button onclick="setKategori('ALL')" data-kat="ALL" class="kat-btn ${kategoriAktif === 'ALL' ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200'} px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition">
+          🔥 Semua Produk
+        </button>
+      `;
+      const unik = [...new Set(produk.map(p => p.kategori).filter(Boolean))];
+      unik.forEach(kat => {
+        const aktif = kategoriAktif === kat;
+        const btn = document.createElement('button');
+        btn.className = `kat-btn ${aktif ? 'bg-slate-900 text-white' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-100'} px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition`;
+        btn.innerText = kat;
+        btn.dataset.kat = kat;
+        btn.onclick = () => setKategori(kat);
+        bar.appendChild(btn);
+      });
+    }
+
+    function setKategori(kat) {
+      kategoriAktif = kat;
+      buatTabKategori(katalogProduk);
+      filterKatalog();
+    }
+
+    function sinkronPencarian(val) {
+      const d = document.getElementById('search-desktop');
+      const m = document.getElementById('search-mobile');
+      if (d && d.value !== val) d.value = val;
+      if (m && m.value !== val) m.value = val;
+      filterKatalog();
+    }
+
+    function filterKatalog() {
+      const qDesktop = document.getElementById('search-desktop')?.value || '';
+      const qMobile = document.getElementById('search-mobile')?.value || '';
+      const query = (qDesktop || qMobile).toLowerCase();
+
+      const hasil = katalogProduk.filter(p => {
+        const cocokKat = kategoriAktif === 'ALL' || p.kategori === kategoriAktif;
+        const cocokCari = p.nama_produk.toLowerCase().includes(query) || (p.deskripsi && p.deskripsi.toLowerCase().includes(query));
+        return cocokKat && cocokCari;
+      });
+      renderKatalog(hasil);
+    }
+
+    function renderKatalog(list) {
+      const grid = document.getElementById('katalog-grid');
+      if (list.length === 0) {
+        grid.innerHTML = `<div class="col-span-full text-center py-14 text-xs text-slate-400 bg-white rounded-3xl border border-slate-100">Produk yang kamu cari belum tersedia.</div>`;
+        return;
+      }
+      grid.innerHTML = list.map(p => `
+        <div class="bg-white rounded-3xl border border-slate-200/70 shadow-xs hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between group">
+          <div onclick="lihatDetail('${p.id_produk}')" class="cursor-pointer">
+            <div class="relative overflow-hidden bg-slate-100 h-36 sm:h-44">
+              <img src="${p.gambar_url || 'https://placehold.co/600x400?text=Digital+Product'}" alt="${p.nama_produk}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+              <span class="absolute top-2.5 left-2.5 bg-white/95 backdrop-blur-xs text-slate-900 text-[10px] font-extrabold px-2.5 py-1 rounded-full shadow-xs">
+                ${p.kategori}
+              </span>
+              <span class="absolute bottom-2.5 right-2.5 bg-slate-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2.5 py-1 rounded-full">
+                👀 Cek Isi
+              </span>
+            </div>
+            <div class="p-3.5 sm:p-4">
+              <h3 class="font-extrabold text-xs sm:text-sm text-slate-900 line-clamp-2 leading-snug group-hover:text-violet-600 transition">${p.nama_produk}</h3>
+              <p class="text-[11px] text-slate-500 line-clamp-1 mt-1">${p.deskripsi || 'Produk digital siap pakai'}</p>
+              <p class="text-violet-600 font-extrabold text-sm sm:text-base mt-2">Rp ${Number(p.harga).toLocaleString('id-ID')}</p>
+            </div>
+          </div>
+          <div class="px-3.5 sm:px-4 pb-3.5 sm:pb-4 flex gap-2">
+            <button onclick="lihatDetail('${p.id_produk}')" class="px-3 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition" title="Lihat Preview Isi">
+              Preview
+            </button>
+            <button onclick="tambahKeranjang('${p.id_produk}')" class="flex-1 bg-slate-900 hover:bg-violet-600 text-white py-2.5 rounded-xl text-xs font-bold transition active:scale-95">
+              + Keranjang
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Modal Detail & Review Isi Produk
+    function lihatDetail(id) {
+      const p = katalogProduk.find(item => item.id_produk === id);
+      if (!p) return;
+      document.getElementById('detail-kategori').innerText = p.kategori;
+      document.getElementById('detail-img').src = p.gambar_url || 'https://placehold.co/600x400?text=Preview';
+      document.getElementById('detail-nama').innerText = p.nama_produk;
+      document.getElementById('detail-harga').innerText = 'Rp ' + Number(p.harga).toLocaleString('id-ID');
+      document.getElementById('detail-deskripsi').innerText = p.deskripsi || 'Produk digital dengan pengiriman otomatis.';
+
+      // Tampilkan link preview sampel jika tersedia
+      const btnPreview = document.getElementById('detail-preview-link');
+      if (p.preview_url && p.preview_url.trim() !== '') {
+        btnPreview.href = p.preview_url;
+        btnPreview.classList.remove('hidden');
+      } else {
+        btnPreview.classList.add('hidden');
+      }
+
+      // Render poin-poin isi produk
+      const listIsi = document.getElementById('detail-isi-list');
+      const poinArray = (p.isi_produk || 'File utama resolusi tinggi / akses penuh\nPanduan penggunaan lengkap\nAkses selamanya via email').split('\n').filter(Boolean);
+      listIsi.innerHTML = poinArray.map(poin => `
+        <li class="flex items-start gap-2">
+          <span class="text-emerald-500 font-extrabold mt-0.5">✓</span>
+          <span>${poin}</span>
+        </li>
+      `).join('');
+
+      document.getElementById('detail-btn-beli').onclick = () => {
+        tambahKeranjang(p.id_produk);
+        tutupModal('modal-detail');
+      };
+      document.getElementById('detail-btn-langsung').onclick = () => {
+        tambahKeranjang(p.id_produk);
+        tutupModal('modal-detail');
+        bukaCheckout();
+      };
+      document.getElementById('modal-detail').classList.remove('hidden');
+    }
+
+    // Manajemen Keranjang
+    function tambahKeranjang(id) {
+      const produk = katalogProduk.find(p => p.id_produk === id);
+      if (!produk) return;
+      const existing = keranjang.find(k => k.id_produk === id);
+      if (existing) existing.qty += 1;
+      else keranjang.push({ ...produk, qty: 1 });
+      updateUIKeranjang();
+    }
+
+    function ubahQty(id, delta) {
+      const idx = keranjang.findIndex(k => k.id_produk === id);
+      if (idx === -1) return;
+      keranjang[idx].qty += delta;
+      if (keranjang[idx].qty <= 0) keranjang.splice(idx, 1);
+      updateUIKeranjang();
+      renderCheckoutList();
+      if (keranjang.length === 0) tutupModal('modal-checkout');
+    }
+
+    function updateUIKeranjang() {
+      const totalItem = keranjang.reduce((sum, item) => sum + item.qty, 0);
+      const totalHarga = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+      
+      document.getElementById('nav-cart-badge').innerText = totalItem;
+      const bar = document.getElementById('floating-cart');
+      if (keranjang.length === 0) {
+        bar.classList.add('hidden');
+      } else {
+        bar.classList.remove('hidden');
+        document.getElementById('cart-badge').innerText = totalItem;
+        document.getElementById('cart-total-text').innerText = 'Rp ' + totalHarga.toLocaleString('id-ID');
+      }
+    }
+
+    function bukaCheckout() {
+      if (keranjang.length === 0) {
+        tampilkanStatus('info', 'Keranjang Masih Kosong', 'Pilih produk digital yang kamu inginkan terlebih dahulu.');
+        return;
+      }
+      renderCheckoutList();
+      document.getElementById('modal-checkout').classList.remove('hidden');
+    }
+
+    function renderCheckoutList() {
+      const container = document.getElementById('checkout-list');
+      const totalHarga = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+      container.innerHTML = keranjang.map(item => `
+        <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-100">
+          <div class="pr-2">
+            <p class="text-xs font-bold text-slate-800 line-clamp-1">${item.nama_produk}</p>
+            <p class="text-[11px] text-violet-600 font-extrabold">Rp ${(item.harga * item.qty).toLocaleString('id-ID')}</p>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <button type="button" onclick="ubahQty('${item.id_produk}', -1)" class="w-7 h-7 rounded-lg bg-white border text-xs font-bold">-</button>
+            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
+            <button type="button" onclick="ubahQty('${item.id_produk}', 1)" class="w-7 h-7 rounded-lg bg-white border text-xs font-bold">+</button>
+          </div>
+        </div>
+      `).join('');
+      document.getElementById('checkout-total').innerText = 'Rp ' + totalHarga.toLocaleString('id-ID');
+    }
+
+    async function prosesCheckout(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-bayar');
+      const teksAsli = btn.innerText;
+      btn.disabled = true;
+      btn.innerText = 'Menyiapkan QRIS / Pembayaran...';
+
+      const totalBayar = keranjang.reduce((sum, item) => sum + (item.harga * item.qty), 0);
+      const emailPembeli = document.getElementById('input-email').value;
+
+      const payload = {
+        action: 'createOrder',
+        nama: document.getElementById('input-nama').value,
+        email: emailPembeli,
+        whatsapp: document.getElementById('input-wa').value,
+        total_bayar: totalBayar,
+        items: keranjang.map(k => ({ id_produk: k.id_produk, nama: k.nama_produk, harga: k.harga, qty: k.qty }))
+      };
+
+      try {
+        if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
+          tutupModal('modal-checkout');
+          tampilkanStatus('info', 'Mode Pratinjau UI', 'Hubungkan URL Google Apps Script & Client Key Midtrans Anda agar popup QRIS langsung muncul di sini.');
+          return;
+        }
+
+        const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+        const data = await res.json();
+
+        if (data.status === 'success' && data.snap_token) {
+          tutupModal('modal-checkout');
+          window.snap.pay(data.snap_token, {
+            onSuccess: function() {
+              keranjang = [];
+              updateUIKeranjang();
+              tampilkanStatus('success', 'Pembayaran Lunas!', `Link akses produk digital telah dikirim otomatis ke ${emailPembeli}. Cek Inbox/Spam email kamu.`);
+            },
+            onPending: function() {
+              keranjang = [];
+              updateUIKeranjang();
+              tampilkanStatus('pending', 'Menunggu Pembayaran', `Segera selesaikan pembayaran. File otomatis terkirim ke ${emailPembeli} begitu lunas.`);
+            },
+            onError: function() {
+              tampilkanStatus('error', 'Pembayaran Gagal', 'Silakan coba metode pembayaran lain.');
+            }
+          });
+        } else {
+          tampilkanStatus('error', 'Gagal Memproses', data.message || 'Cek kembali pengaturan Midtrans.');
+        }
+      } catch (err) {
+        tampilkanStatus('error', 'Koneksi Bermasalah', 'Gagal terhubung ke server.');
+      } finally {
+        btn.disabled = false;
+        btn.innerText = teksAsli;
+      }
+    }
+
+    // ================= FITUR ADMIN PENJUAL (TAMBAH, EDIT, HAPUS) =================
+    function bukaLoginAdmin() {
+      if (adminPinTersimpan) {
+        muatDashboardOwner();
+        document.getElementById('modal-admin').classList.remove('hidden');
+      } else {
+        document.getElementById('input-pin').value = '';
+        document.getElementById('modal-pin').classList.remove('hidden');
+      }
+    }
+
+    async function verifikasiPin() {
+      const pin = document.getElementById('input-pin').value.trim();
+      if (!pin) return;
+
+      if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
+        if (pin !== '123456') {
+          tutupModal('modal-pin');
+          tampilkanStatus('error', 'PIN Salah', 'PIN default mode demo adalah 123456.');
+          return;
+        }
+        adminPinTersimpan = pin;
+        tutupModal('modal-pin');
+        document.getElementById('stat-omzet').innerText = 'Rp 245.000 (Demo)';
+        document.getElementById('stat-sukses').innerText = '6 Order';
+        document.getElementById('stat-produk').innerText = katalogProduk.length + ' Item';
+        renderDaftarAdmin();
+        document.getElementById('modal-admin').classList.remove('hidden');
+        return;
+      }
+
+      // Verifikasi PIN langsung ke server Apps Script & ambil statistik penjualan
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getOwnerStats', pin: pin })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          adminPinTersimpan = pin;
+          tutupModal('modal-pin');
+          updateStatistikUI(json.stats);
+          renderDaftarAdmin();
+          document.getElementById('modal-admin').classList.remove('hidden');
+        } else {
+          tutupModal('modal-pin');
+          tampilkanStatus('error', 'Akses Ditolak', json.message || 'PIN Pemilik Toko salah!');
+        }
+      } catch (err) {
+        tutupModal('modal-pin');
+        tampilkanStatus('error', 'Error', 'Gagal memverifikasi PIN ke server.');
+      }
+    }
+
+    async function muatDashboardOwner() {
+      renderDaftarAdmin();
+      document.getElementById('stat-produk').innerText = katalogProduk.length + ' Item';
+      if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) return;
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'getOwnerStats', pin: adminPinTersimpan })
+        });
+        const json = await res.json();
+        if (json.status === 'success') updateStatistikUI(json.stats);
+      } catch (e) {}
+    }
+
+    function updateStatistikUI(stats) {
+      if (!stats) return;
+      document.getElementById('stat-omzet').innerText = 'Rp ' + Number(stats.total_omzet || 0).toLocaleString('id-ID');
+      document.getElementById('stat-sukses').innerText = (stats.total_order_lunas || 0) + ' Order';
+      document.getElementById('stat-produk').innerText = katalogProduk.length + ' Item';
+    }
+
+    function renderDaftarAdmin() {
+      document.getElementById('adm-count').innerText = katalogProduk.length;
+      const container = document.getElementById('admin-product-list');
+      container.innerHTML = katalogProduk.map(p => `
+        <div class="bg-white border border-slate-200 rounded-2xl p-3 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+            <img src="${p.gambar_url || 'https://placehold.co/100'}" class="w-12 h-12 rounded-xl object-cover shrink-0 bg-slate-100">
+            <div class="min-w-0">
+              <span class="text-[10px] font-bold bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">${p.kategori}</span>
+              <h4 class="text-xs font-extrabold text-slate-900 truncate mt-1">${p.nama_produk}</h4>
+              <p class="text-xs font-bold text-violet-600">Rp ${Number(p.harga).toLocaleString('id-ID')}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-1.5 shrink-0">
+            <button onclick="isiFormEdit('${p.id_produk}')" class="px-3 py-1.5 rounded-xl bg-amber-50 hover:bg-amber-100 text-amber-700 text-xs font-bold">Edit</button>
+            <button onclick="hapusProdukAdmin('${p.id_produk}')" class="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-600 text-xs font-bold">Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function isiFormEdit(id) {
+      const p = katalogProduk.find(item => item.id_produk === id);
+      if (!p) return;
+      document.getElementById('admin-form-title').innerText = '✏️ Edit Produk';
+      document.getElementById('btn-reset-form').classList.remove('hidden');
+      document.getElementById('btn-simpan-produk').innerText = 'Simpan Perubahan';
+      
+      document.getElementById('adm-id').value = p.id_produk;
+      document.getElementById('adm-nama').value = p.nama_produk;
+      document.getElementById('adm-kategori').value = p.kategori;
+      document.getElementById('adm-harga').value = p.harga;
+      document.getElementById('adm-gambar').value = p.gambar_url || '';
+      document.getElementById('adm-preview').value = p.preview_url || '';
+      document.getElementById('adm-isi').value = p.isi_produk || '';
+      document.getElementById('adm-deskripsi').value = p.deskripsi || '';
+      document.getElementById('adm-file').value = p.file_akses || '';
+    }
+
+    function resetFormAdmin() {
+      document.getElementById('admin-form-title').innerText = '+ Tambah Produk Baru';
+      document.getElementById('btn-reset-form').classList.add('hidden');
+      document.getElementById('btn-simpan-produk').innerText = 'Simpan Produk ke Katalog';
+      document.getElementById('admin-product-form').reset();
+      document.getElementById('adm-id').value = '';
+    }
+
+    async function simpanProdukAdmin(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-simpan-produk');
+      btn.disabled = true;
+      btn.innerText = 'Menyimpan...';
+
+      const idLama = document.getElementById('adm-id').value;
+      const dataProduk = {
+        id_produk: idLama || 'DIG-' + Date.now().toString().slice(-5),
+        nama_produk: document.getElementById('adm-nama').value,
+        kategori: document.getElementById('adm-kategori').value,
+        harga: Number(document.getElementById('adm-harga').value),
+        gambar_url: document.getElementById('adm-gambar').value,
+        preview_url: document.getElementById('adm-preview').value,
+        isi_produk: document.getElementById('adm-isi').value,
+        deskripsi: document.getElementById('adm-deskripsi').value,
+        file_akses: document.getElementById('adm-file').value
+      };
+
+      try {
+        if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
+          if (adminPinTersimpan !== '123456') {
+            adminPinTersimpan = '';
+            tutupModal('modal-admin');
+            tampilkanStatus('error', 'PIN Salah', 'PIN default mode demo adalah 123456.');
+            return;
+          }
+          if (idLama) {
+            const idx = katalogProduk.findIndex(p => p.id_produk === idLama);
+            if (idx > -1) katalogProduk[idx] = dataProduk;
+          } else {
+            katalogProduk.unshift(dataProduk);
+          }
+          resetFormAdmin();
+          renderSemuaUI();
+          return;
+        }
+
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({
+            action: idLama ? 'updateProduct' : 'addProduct',
+            pin: adminPinTersimpan,
+            product: dataProduk
+          })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          resetFormAdmin();
+          await initToko();
+        } else {
+          adminPinTersimpan = '';
+          tutupModal('modal-admin');
+          tampilkanStatus('error', 'Akses Ditolak', json.message || 'PIN Admin tidak valid.');
+        }
+      } finally {
+        btn.disabled = false;
+        btn.innerText = 'Simpan Produk ke Katalog';
+      }
+    }
+
+    async function hapusProdukAdmin(id) {
+      try {
+        if (APPS_SCRIPT_URL.includes('GANTI_DENGAN_ID')) {
+          katalogProduk = katalogProduk.filter(p => p.id_produk !== id);
+          renderSemuaUI();
+          return;
+        }
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          body: JSON.stringify({ action: 'deleteProduct', pin: adminPinTersimpan, id_produk: id })
+        });
+        const json = await res.json();
+        if (json.status === 'success') {
+          await initToko();
+        } else {
+          tampilkanStatus('error', 'Gagal Menghapus', json.message);
+        }
+      } catch (err) {
+        tampilkanStatus('error', 'Error', 'Gagal terhubung ke server.');
+      }
+    }
+
+    function tampilkanStatus(tipe, judul, deskripsi) {
+      const icon = document.getElementById('status-icon');
+      if (tipe === 'success') {
+        icon.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4 bg-emerald-100 text-emerald-600 text-2xl font-bold';
+        icon.innerText = '✓';
+      } else if (tipe === 'pending' || tipe === 'info') {
+        icon.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4 bg-amber-100 text-amber-600 text-2xl font-bold';
+        icon.innerText = '⚡';
+      } else {
+        icon.className = 'w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4 bg-rose-100 text-rose-600 text-2xl font-bold';
+        icon.innerText = '!';
+      }
+      document.getElementById('status-title').innerText = judul;
+      document.getElementById('status-desc').innerText = deskripsi;
+      document.getElementById('modal-status').classList.remove('hidden');
+    }
+
+    function tutupModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    cekModeTampilan();
+    initToko();
+  </script>
+</body>
+</html>
