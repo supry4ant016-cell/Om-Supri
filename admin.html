@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Panel Pemilik Toko — Kelola Produk Digital</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>body { font-family: 'Plus Jakarta Sans', sans-serif; }</style>
+</head>
+<body class="bg-slate-100 text-slate-900 min-h-screen">
+
+  <!-- Layar Login PIN Pemilik Toko -->
+  <div id="login-screen" class="min-h-screen flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-sm rounded-3xl p-7 shadow-xl border border-slate-200 text-center">
+      <div class="w-14 h-14 bg-slate-900 text-amber-400 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4">👑</div>
+      <h1 class="text-xl font-extrabold">Dashboard Pemilik Toko</h1>
+      <p class="text-xs text-slate-500 mt-1 mb-5">Masukkan PIN Admin untuk mengelola produk & link checkout.</p>
+      <input type="password" id="pin-input" placeholder="Masukkan PIN (Default: 123456)" class="w-full border border-slate-300 rounded-xl p-3 text-center font-bold tracking-widest mb-3 outline-none focus:border-violet-600">
+      <button onclick="loginAdmin()" id="btn-login" class="w-full bg-slate-900 hover:bg-violet-600 text-white py-3.5 rounded-xl text-xs font-extrabold transition">Masuk ke Panel Toko</button>
+    </div>
+  </div>
+
+  <!-- Dashboard Utama Admin -->
+  <div id="admin-dashboard" class="hidden max-w-4xl mx-auto p-4 sm:p-6 pb-20">
+    <!-- Top Bar -->
+    <div class="bg-slate-900 text-white rounded-3xl p-5 mb-6 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+      <div>
+        <span class="text-[10px] font-extrabold uppercase tracking-wider bg-amber-400 text-slate-950 px-2.5 py-0.5 rounded-full">Owner Panel</span>
+        <h1 class="text-lg sm:text-xl font-extrabold mt-1">Kelola Produk & Link CO</h1>
+      </div>
+      <div class="flex gap-2">
+        <a href="index.html" target="_blank" class="bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 rounded-xl text-xs font-bold">Lihat Toko Pembeli &nearr;</a>
+        <button onclick="bukaFormProduk()" class="bg-violet-600 hover:bg-violet-500 text-white px-4 py-2 rounded-xl text-xs font-extrabold">+ Tambah Produk</button>
+      </div>
+    </div>
+
+    <!-- Pengaturan Profil Toko -->
+    <div class="bg-white rounded-3xl p-5 border border-slate-200 mb-6">
+      <h2 class="text-sm font-extrabold mb-3">⚙️ Profil Toko di Bio</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <input type="text" id="set-nama" placeholder="Nama Toko" class="border border-slate-200 rounded-xl p-2.5 text-xs">
+        <input type="text" id="set-bio" placeholder="Bio Singkat Toko" class="border border-slate-200 rounded-xl p-2.5 text-xs">
+        <input type="text" id="set-wa" placeholder="No WA (62812xxx)" class="border border-slate-200 rounded-xl p-2.5 text-xs">
+      </div>
+      <button onclick="simpanProfil()" id="btn-save-set" class="mt-3 bg-slate-800 hover:bg-slate-900 text-white px-4 py-2 rounded-xl text-xs font-bold">Simpan Profil</button>
+    </div>
+
+    <!-- Daftar Produk Anda -->
+    <div class="bg-white rounded-3xl p-5 border border-slate-200">
+      <h2 class="text-sm font-extrabold mb-4">📦 Daftar Produk Digital Anda (<span id="total-prod">0</span>)</h2>
+      <div id="admin-product-list" class="space-y-3"></div>
+    </div>
+  </div>
+
+  <!-- Modal Tambah / Edit Produk -->
+  <div id="modal-form" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-lg rounded-3xl p-6 max-h-[92vh] overflow-y-auto">
+      <div class="flex justify-between items-center mb-4">
+        <h3 id="form-title" class="text-base font-extrabold">Tambah Produk Baru</h3>
+        <button onclick="tutupForm()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 font-bold">&times;</button>
+      </div>
+
+      <form onsubmit="simpanProduk(event)" class="space-y-3">
+        <input type="hidden" id="prod-id">
+        <div>
+          <label class="text-[11px] font-bold text-slate-600">Nama Produk Digital *</label>
+          <input type="text" id="prod-nama" required placeholder="Contoh: E-Book Panduan Jualan TikTok" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="text-[11px] font-bold text-slate-600">Kategori *</label>
+            <input type="text" id="prod-kat" required placeholder="E-Book / Template / Preset" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-600">Harga (Rp) *</label>
+            <input type="number" id="prod-harga" required placeholder="49000" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+          </div>
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-violet-700">🔗 Link Checkout (Link CO Produk) *</label>
+          <input type="url" id="prod-link-co" required placeholder="https://lynk.id/... atau https://mayar.id/..." class="w-full border-2 border-violet-200 bg-violet-50/40 rounded-xl p-2.5 text-xs mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-600">Link Gambar Cover Produk</label>
+          <input type="url" id="prod-img" placeholder="https://..." class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-600">Link Sampel / Preview Gratis (Opsional)</label>
+          <input type="url" id="prod-prev" placeholder="https://drive.google.com/... (untuk diintip pembeli)" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-600">Poin Isi Produk (Pisahkan dengan tanda | )</label>
+          <input type="text" id="prod-isi" placeholder="Materi PDF 50 Halaman|Bonus Template Excel|Grup Support" class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1">
+        </div>
+        <div>
+          <label class="text-[11px] font-bold text-slate-600">Deskripsi Singkat</label>
+          <textarea id="prod-desc" rows="2" placeholder="Jelaskan manfaat utama produk ini..." class="w-full border border-slate-200 rounded-xl p-2.5 text-xs mt-1"></textarea>
+        </div>
+
+        <button type="submit" id="btn-save-prod" class="w-full bg-violet-600 hover:bg-violet-700 text-white py-3.5 rounded-xl text-xs font-extrabold mt-2">
+          Simpan Produk ke Toko
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // GANTI DENGAN URL WEB APP APPS SCRIPT (/exec) ANDA
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxrrTbWHAnT43rVwXsZSDfo06aqQpmbfXYV_PHfqxzVp0kKgC8IDS-HMbjZSU2nTbhQ/exec';
+    let currentPin = '';
+    let productsCache = [];
+
+    async function loginAdmin() {
+      const pin = document.getElementById('pin-input').value;
+      if (!pin) return alert('Masukkan PIN terlebih dahulu');
+      const btn = document.getElementById('btn-login');
+      btn.innerText = 'Memeriksa...';
+
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=adminGetAll&pin=${encodeURIComponent(pin)}`);
+      const json = await res.json();
+      btn.innerText = 'Masuk ke Panel Toko';
+
+      if (json.status === 'success') {
+        currentPin = pin;
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('admin-dashboard').classList.remove('hidden');
+        renderAdminData(json);
+      } else {
+        alert(json.message || 'PIN Salah!');
+      }
+    }
+
+    function renderAdminData(json) {
+      productsCache = json.products || [];
+      document.getElementById('total-prod').innerText = productsCache.length;
+
+      if (json.settings) {
+        document.getElementById('set-nama').value = json.settings.nama_toko || '';
+        document.getElementById('set-bio').value = json.settings.bio_toko || '';
+        document.getElementById('set-wa').value = json.settings.no_wa || '';
+      }
+
+      const listEl = document.getElementById('admin-product-list');
+      if (productsCache.length === 0) {
+        listEl.innerHTML = `<p class="text-xs text-slate-400 text-center py-6">Belum ada produk. Klik "+ Tambah Produk" di atas.</p>`;
+        return;
+      }
+
+      listEl.innerHTML = productsCache.map(p => `
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl border border-slate-200 bg-slate-50/60">
+          <div class="flex items-center gap-3">
+            <img src="${p.gambar_url || 'https://placehold.co/100'}" class="w-14 h-14 rounded-xl object-cover bg-white border">
+            <div>
+              <span class="text-[10px] font-extrabold bg-violet-100 text-violet-700 px-2 py-0.5 rounded-md">${p.kategori}</span>
+              <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 mt-0.5">${p.nama_produk}</h4>
+              <p class="text-xs font-bold text-emerald-600">Rp ${Number(p.harga).toLocaleString('id-ID')}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 self-end sm:self-center">
+            <button onclick="editProduk('${p.id_produk}')" class="bg-amber-100 hover:bg-amber-200 text-amber-900 px-3 py-1.5 rounded-xl text-xs font-bold">✏️ Edit</button>
+            <button onclick="hapusProduk('${p.id_produk}')" class="bg-rose-100 hover:bg-rose-200 text-rose-700 px-3 py-1.5 rounded-xl text-xs font-bold">🗑️ Hapus</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function bukaFormProduk() {
+      document.getElementById('form-title').innerText = 'Tambah Produk Baru';
+      document.getElementById('prod-id').value = '';
+      document.getElementById('prod-nama').value = '';
+      document.getElementById('prod-kat').value = '';
+      document.getElementById('prod-harga').value = '';
+      document.getElementById('prod-link-co').value = '';
+      document.getElementById('prod-img').value = '';
+      document.getElementById('prod-prev').value = '';
+      document.getElementById('prod-isi').value = '';
+      document.getElementById('prod-desc').value = '';
+      document.getElementById('modal-form').classList.remove('hidden');
+    }
+
+    function editProduk(id) {
+      const p = productsCache.find(x => x.id_produk === id);
+      if (!p) return;
+      document.getElementById('form-title').innerText = 'Edit Produk';
+      document.getElementById('prod-id').value = p.id_produk;
+      document.getElementById('prod-nama').value = p.nama_produk;
+      document.getElementById('prod-kat').value = p.kategori;
+      document.getElementById('prod-harga').value = p.harga;
+      document.getElementById('prod-link-co').value = p.link_co || '';
+      document.getElementById('prod-img').value = p.gambar_url || '';
+      document.getElementById('prod-prev').value = p.preview_url || '';
+      document.getElementById('prod-isi').value = p.isi_produk || '';
+      document.getElementById('prod-desc').value = p.deskripsi || '';
+      document.getElementById('modal-form').classList.remove('hidden');
+    }
+
+    function tutupForm() {
+      document.getElementById('modal-form').classList.add('hidden');
+    }
+
+    async function simpanProduk(e) {
+      e.preventDefault();
+      const btn = document.getElementById('btn-save-prod');
+      btn.innerText = 'Menyimpan...';
+      btn.disabled = true;
+
+      const id = document.getElementById('prod-id').value;
+      const payload = {
+        pin: currentPin,
+        action: id ? 'editProduct' : 'addProduct',
+        id_produk: id,
+        nama_produk: document.getElementById('prod-nama').value,
+        kategori: document.getElementById('prod-kat').value,
+        harga: document.getElementById('prod-harga').value,
+        link_co: document.getElementById('prod-link-co').value,
+        gambar_url: document.getElementById('prod-img').value,
+        preview_url: document.getElementById('prod-prev').value,
+        isi_produk: document.getElementById('prod-isi').value,
+        deskripsi: document.getElementById('prod-desc').value
+      };
+
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+      const json = await res.json();
+      alert(json.message);
+
+      btn.innerText = 'Simpan Produk ke Toko';
+      btn.disabled = false;
+      tutupForm();
+      refreshAdmin();
+    }
+
+    async function hapusProduk(id) {
+      if (!confirm('Yakin ingin menghapus produk ini secara permanen?')) return;
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: 'POST',
+        body: JSON.stringify({ pin: currentPin, action: 'deleteProduct', id_produk: id })
+      });
+      const json = await res.json();
+      alert(json.message);
+      refreshAdmin();
+    }
+
+    async function simpanProfil() {
+      const btn = document.getElementById('btn-save-set');
+      btn.innerText = 'Menyimpan...';
+      const payload = {
+        pin: currentPin,
+        action: 'saveSettings',
+        nama_toko: document.getElementById('set-nama').value,
+        bio_toko: document.getElementById('set-bio').value,
+        no_wa: document.getElementById('set-wa').value
+      };
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+      const json = await res.json();
+      alert(json.message);
+      btn.innerText = 'Simpan Profil';
+    }
+
+    async function refreshAdmin() {
+      const res = await fetch(`${APPS_SCRIPT_URL}?action=adminGetAll&pin=${encodeURIComponent(currentPin)}`);
+      const json = await res.json();
+      if (json.status === 'success') renderAdminData(json);
+    }
+  </script>
+</body>
+</html>
